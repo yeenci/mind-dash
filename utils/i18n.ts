@@ -1,3 +1,5 @@
+"use client";
+
 export type Language = "en" | "vi";
 
 const translations = {
@@ -209,7 +211,7 @@ export function getLanguage(): Language {
     const l = localStorage.getItem(LANGUAGE_KEY);
     return l === "vi" ? "vi" : "en";
   } catch {
-    return "en";
+    return "vi";
   }
 }
 

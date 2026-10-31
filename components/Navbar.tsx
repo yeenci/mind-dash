@@ -43,8 +43,17 @@ export const Navbar: React.FC<NavbarProps> = ({
             <Zap className="w-5 h-5 fill-current" />
           </div>
           <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            {t('appName', undefined, language)}
+            {t("appName", undefined, language)}
           </span>
+        </div>
+
+        {/* 🪼 Actions 🪼 */}
+        <div className="flex items-center space-x-1.5 sm:space-x-3">
+          <button
+            onClick={onHome}
+            title={t("home", undefined, language)}
+            
+          ></button>
         </div>
       </div>
     </header>
