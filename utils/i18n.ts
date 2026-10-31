@@ -213,3 +213,25 @@ export function getLanguage(): Language {
   }
 }
 
+export function setLanguage(lang: Language): void {
+  try {
+    localStorage.setItem(LANGUAGE_KEY, lang);
+  } catch (err) {
+    console.error("Failed to save language:", err);
+  }
+}
+
+export function t(
+  key: keyof (typeof translations)["en"],
+  params?: Record<string, string | number>,
+  lang: Language = getLanguage(),
+): string {
+  const dict = translations[lang] || translations.en;
+  let text = dict[key] || translations.en[key] || key;
+  if (params) {
+    Object.entries(params).forEach(([k, v]) => {
+      text = text.replace(new RegExp(`{${k}`, "g"), String(v));
+    });
+  }
+  return text;
+}
