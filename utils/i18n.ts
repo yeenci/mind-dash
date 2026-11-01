@@ -209,7 +209,8 @@ const LANGUAGE_KEY = "minddash_lang_v1";
 export function getLanguage(): Language {
   try {
     const l = localStorage.getItem(LANGUAGE_KEY);
-    return l === "vi" ? "vi" : "en";
+    if (l === "en" || l === "vi") return l;
+    return "vi";
   } catch {
     return "vi";
   }
@@ -228,7 +229,7 @@ export function t(
   params?: Record<string, string | number>,
   lang: Language = getLanguage(),
 ): string {
-  const dict = translations[lang] || translations.en;
+  const dict = translations[lang] || translations.vi;
   let text = dict[key] || translations.en[key] || key;
   if (params) {
     Object.entries(params).forEach(([k, v]) => {
