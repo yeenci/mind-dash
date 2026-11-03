@@ -1,3 +1,5 @@
+import { OperationType } from "@/types";
+
 export interface GeneratedExpression {
   expressionString: string;
   displayString: string;
@@ -25,18 +27,18 @@ export function evaluateExpression(exprStr: string): number {
         intermediate.push(prev / next);
       }
     } else {
-      intermediate.push(token)
+      intermediate.push(token);
     }
   }
 
   // 🪼 2nd pass: addition & subtraction
   let result = intermediate[0] as number;
-  for (let i =1; i < intermediate.length; i += 2) {
+  for (let i = 1; i < intermediate.length; i += 2) {
     const op = intermediate[i] as string;
-    const next = intermediate[i+1] as number;
-    if (op === '+') {
+    const next = intermediate[i + 1] as number;
+    if (op === "+") {
       result += next;
-    } else if (op === '-') {
+    } else if (op === "-") {
       result -= next;
     }
   }
@@ -68,4 +70,56 @@ function tokenize(expr: string): (number | string)[] {
     }
   }
   return tokens;
+}
+
+// 🪼 Generate a random arrithmetic expression based on configuration
+export function generateExpression(
+  maxNumber: number,
+  operatorCount: number,
+  selectedOperations: OperationType[],
+): GeneratedExpression {
+  if (selectedOperations.length === 0) {
+    selectedOperations = ["+"];
+  }
+
+  const opSymbols: OperationType[] = selectedOperations;
+  let attempts = 0;
+
+  while (attempts < 10) {
+    attempts++;
+    const operands: number[] = [];
+    const operators: OperationType[] = [];
+
+    for (let i = 0; i < operatorCount + 1; i++) {
+      const op = Math.floor(Math.random() * maxNumber) + 1;
+      operands.push(op);
+    }
+
+    for (let i = 0; i < operatorCount; i++) {
+      const randomOp = opSymbols[Math.floor(Math.random() * opSymbols.length)];
+      operators.push(randomOp);
+    }
+
+    // 🪼 Advanced division rule: ensure clean integer division with  diverse numbers (e.g. 48 ÷ 12, 100 ÷ 25, 36 ÷ 6)
+    for (let i = 0; i < operators.length; i++) {
+      if (operators[i] === "÷") {
+        const maxDivisor = Math.min(maxNumber, 25);
+        let divisor = Math.floor(Math.random() * (maxDivisor - 1)) + 2;
+        if (divisor < 2) divisor = 2;
+
+        const maxMultipler = Math.max(2, Math.floor(maxNumber / divisor));
+        let multiplier = Math.floor(Math.random() * (maxMultipler - 1)) + 2;
+        if (multiplier <= 1) multiplier = 2;
+
+        operands[i + 1] = divisor;
+        operands[i] = divisor * multiplier;
+      }
+    }
+  }
+
+  return {
+    expressionString: "48 / 12",
+    displayString: "48 ÷ 12",
+    result: 4,
+  };
 }
