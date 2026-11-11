@@ -2,7 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'MinDash - Mental Math practice',
+  title: 'Mathy - Mental Math practice',
   description: 'Improve your mental calculation speed, accuracy, and confidence through customizable arithmetic exercises.'
 }
 
