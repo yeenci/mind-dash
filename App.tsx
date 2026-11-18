@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Attempt, ExerciseStatus, PracticeStats, UserSettings } from "./types";
 import {
   clearAllAttempts,
+  exportAttemptsJson,
   getTheme,
   loadAttempts,
   loadSettings,
@@ -11,6 +12,7 @@ import {
 } from "./utils/storageManger";
 import { getLanguage, Language, setLanguage } from "./utils/i18n";
 import { GeneratedExpression, generateExpression } from "./utils/mathEngine";
+import { Navbar } from "./components/Navbar";
 
 export default function App() {
   const [settings, setSettings] = useState<UserSettings>(loadSettings());
@@ -154,5 +156,29 @@ export default function App() {
     totalPracticeTimeSeconds,
   };
 
-  return <>Chiiiiiii</>;
+  return (
+    <div
+      className={`min-h-screen flex flex-col font-sans transition-colors duration-200 ${
+        theme === "dark"
+          ? "bg-slate-950 text-white"
+          : "bg-slate-50 text-slate-900"
+      }`}
+    >
+      {/* Navbar */}
+      <Navbar
+        onOpenProgress={() => setIsProgressOpen(true)}
+        onOpenSettings={() => setIsSettingOpen(true)}
+        onHome={() => {
+          setIsPracticing(false);
+          setCurrentExpression(null);
+        }}
+        onExport={() => exportAttemptsJson(attempts)}
+        theme={theme}
+        onToggleTheme={handleToggleTheme}
+        settings={settings}
+        language={language}
+        onToggleLanguage={handleToggleLanguage}
+      />
+    </div>
+  );
 }
