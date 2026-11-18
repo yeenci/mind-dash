@@ -4,7 +4,7 @@ export type Language = "en" | "vi";
 
 const translations = {
   en: {
-    appName: "MindDash",
+    appName: "Mathy",
     home: "Home",
     progress: "Progress",
     settings: "Settings",
@@ -103,7 +103,7 @@ const translations = {
     noMatchingRecords: "No matching practice records found.",
   },
   vi: {
-    appName: "MindDash",
+    appName: "Mathy",
     home: "Trang chủ",
     progress: "Tiến độ",
     settings: "Cài đặt",

@@ -1,5 +1,6 @@
 import { UserSettings } from "@/types";
-import { Language } from "@/utils/i18n";
+import { Language, t } from "@/utils/i18n";
+import { Zap } from "lucide-react";
 
 interface NavbarProps {
   onOpenProgress: () => void;
@@ -32,7 +33,20 @@ export const Navbar: React.FC<NavbarProps> = ({
           : "bg-white border-slate-200 text-slate-800"
       }`}
     >
-      Navigation bar
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        {/* Logo */}
+        <div
+          className="flex items-center space-x-2 cursor pointer"
+          onClick={onHome}
+        >
+          <div className="w-8 h-8 sm:w-9 rounded-xl bg-linear-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 shrink-0">
+            <Zap className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
+          </div>
+          <span className="text-lg sm:text-xl font-bold tracking-tight bg-linear-to-r from-blue-600 from-blue to-indigo-600 bg-clip-text text-transparent truncate max-w-27.5 sm:max-w-none">
+            {t("appName", undefined, language)}
+          </span>
+        </div>
+      </div>
     </header>
   );
 };
