@@ -13,6 +13,7 @@ import {
 import { getLanguage, Language, setLanguage } from "./utils/i18n";
 import { GeneratedExpression, generateExpression } from "./utils/mathEngine";
 import { Navbar } from "./components/Navbar";
+import { PracticeSetup } from "./components/PracticeSetup";
 
 export default function App() {
   const [settings, setSettings] = useState<UserSettings>(loadSettings());
@@ -179,6 +180,25 @@ export default function App() {
         language={language}
         onToggleLanguage={handleToggleLanguage}
       />
+
+      {/* Main Content */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Practice Setup Area */}
+          <div className="lg:col-span-4">
+            <PracticeSetup
+              settings={settings}
+              onUpdateSettings={handleUpdateSettings}
+              onStartPractice={handleStartPractice}
+              theme={theme}
+              isPracticing={isPracticing}
+              language={language}
+            />
+          </div>
+
+          {/* Practice Area */}
+        </div>
+      </main>
     </div>
   );
 }
