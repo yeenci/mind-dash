@@ -29,7 +29,7 @@ export interface PracticeStats {
   accuracy: number;
   givenUpCount: number;
   timedOutCount: number;
-  avgTimeCount: number;
-  fastedTimeSeconds: number | null;
+  avgTimeSeconds: number;
+  fastestTimeSeconds: number | null;
   totalPracticeTimeSeconds: number;
 }

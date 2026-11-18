@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { Attempt, ExerciseStatus, UserSettings } from "./types";
+import { Attempt, ExerciseStatus, PracticeStats, UserSettings } from "./types";
 import {
+  clearAllAttempts,
   getTheme,
   loadAttempts,
   loadSettings,
@@ -97,6 +98,60 @@ export default function App() {
     const updatedAttempts = [newAttempt, ...attempts];
     setAttempts(updatedAttempts);
     saveAttempts(updatedAttempts);
+  };
+
+  const handleConsentAccept = () => {
+    handleUpdateSettings({
+      consentCompleted: true,
+      storageMode: "persistent",
+      retentionDays: 30,
+    });
+    setIsConsentOpen(false);
+  };
+
+  const handleConsentDecline = () => {
+    handleUpdateSettings({
+      consentCompleted: true,
+      storageMode: "temporary",
+      retentionDays: 1,
+    });
+    setIsConsentOpen(false);
+  };
+
+  const handleClearProgress = () => {
+    clearAllAttempts();
+    setAttempts([]);
+  };
+
+  // Compute stats
+  const correctAttempts = attempts.filter((a) => a.result === "Correct");
+  const totalAttempts = attempts.length;
+  const correctCount = correctAttempts.length;
+  const accuracy = totalAttempts
+    ? Math.round((correctCount / totalAttempts) * 100)
+    : 0;
+  const givenUpCount = attempts.filter((a) => a.result === "Given Up").length;
+  const timedOutCount = attempts.filter((a) => a.result === "Timed Out").length;
+  const totalPracticeTimeSeconds = attempts.reduce(
+    (acc, a) => acc + a.timeSpentSeconds,
+    0,
+  );
+  const avgTimeSeconds = totalAttempts
+    ? Math.round(totalPracticeTimeSeconds / totalAttempts)
+    : 0;
+  const fastestTimeSeconds = correctAttempts.length
+    ? Math.min(...correctAttempts.map((a) => a.timeSpentSeconds))
+    : null;
+
+  const stats: PracticeStats = {
+    totalAttempts,
+    correctCount,
+    accuracy,
+    givenUpCount,
+    timedOutCount,
+    avgTimeSeconds,
+    fastestTimeSeconds,
+    totalPracticeTimeSeconds,
   };
 
   return <>Chiiiiiii</>;
