@@ -14,6 +14,7 @@ import { getLanguage, Language, setLanguage } from "./utils/i18n";
 import { GeneratedExpression, generateExpression } from "./utils/mathEngine";
 import { Navbar } from "./components/Navbar";
 import { PracticeSetup } from "./components/PracticeSetup";
+import { PracticeArea } from "./components/PracticeArea";
 
 export default function App() {
   const [settings, setSettings] = useState<UserSettings>(loadSettings());
@@ -70,7 +71,7 @@ export default function App() {
     setIsPracticing(true);
   };
 
-  const handleNextPractice = () => {
+  const handleNextExercise = () => {
     const expr = generateExpression(
       settings.maxNumber,
       settings.operatorCount,
@@ -197,6 +198,16 @@ export default function App() {
           </div>
 
           {/* Practice Area */}
+          <div className="lg:col-span-8">
+            <PracticeArea
+              currentExpression={currentExpression}
+              onCompleteExercise={handleCompleteExercise}
+              onNextExercise={handleNextExercise}
+              theme={theme}
+              isPracticing={isPracticing}
+              language={language}
+            />
+          </div>
         </div>
       </main>
     </div>
