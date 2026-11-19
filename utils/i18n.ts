@@ -101,6 +101,7 @@ const translations = {
     incorrectTries: "Incorrect Tries",
     date: "Date",
     noMatchingRecords: "No matching practice records found.",
+    languageToggle: "Switch language (EN / VN)",
   },
   vi: {
     appName: "Mathy",
@@ -201,6 +202,7 @@ const translations = {
     incorrectTries: "Số lần sai",
     date: "Ngày giờ",
     noMatchingRecords: "Không tìm thấy bản ghi phù hợp.",
+    languageToggle: "Đổi ngôn ngữ (EN / VN)",
   },
 };
 

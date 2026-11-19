@@ -1,5 +1,13 @@
-import { useEffect, useState } from "react";
-import { Attempt, ExerciseStatus, PracticeStats, UserSettings } from "./types";
+
+"use client";
+
+import { useEffect, useState, useSyncExternalStore } from "react";
+import {
+  Attempt,
+  ExerciseStatus,
+  PracticeStats,
+  UserSettings,
+} from "./types";
 import {
   clearAllAttempts,
   exportAttemptsJson,
@@ -16,56 +24,100 @@ import { Navbar } from "./components/Navbar";
 import { PracticeSetup } from "./components/PracticeSetup";
 import { PracticeArea } from "./components/PracticeArea";
 
-export default function App() {
-  const [settings, setSettings] = useState<UserSettings>(loadSettings());
-  const [attempts, setAttempts] = useState<Attempt[]>(loadAttempts());
-  const [theme, setThemeState] = useState<"light" | "dark">(getTheme);
-  const [language, setLanguageState] = useState<Language>(getLanguage());
+const DEFAULT_SETTINGS: UserSettings = {
+  maxNumber: 10,
+  operatorCount: 2,
+  selectedOperations: ["+", "-"],
+  consentCompleted: false,
+  storageMode: "temporary",
+  retentionDays: 1,
+  lastActiveAt: "",
+};
 
-  const [isPracticing, setIsPracticing] = useState<boolean>(false);
+function subscribeToHydration() {
+  return () => {};
+}
+
+function getServerSnapshot() {
+  return false;
+}
+
+function getClientSnapshot() {
+  return true;
+}
+
+export default function App() {
+  // Detect when the component has hydrated.
+  const isHydrated = useSyncExternalStore(
+    subscribeToHydration,
+    getClientSnapshot,
+    getServerSnapshot
+  );
+
+  // App data
+  const settings = isHydrated ? loadSettings() : DEFAULT_SETTINGS;
+  const attempts = isHydrated ? loadAttempts() : [];
+  const theme = isHydrated ? getTheme() : "light";
+  const language = isHydrated ? getLanguage() : "en";
+
+  const [isPracticing, setIsPracticing] = useState(false);
   const [currentExpression, setCurrentExpression] =
     useState<GeneratedExpression | null>(null);
 
-  // Modals state
-  const [isProgressOpen, setIsProgressOpen] = useState<boolean>(false);
-  const [isSettingOpen, setIsSettingOpen] = useState<boolean>(false);
-  const [isConsentOpen, setIsConsentOpen] = useState<boolean>(
-    !loadSettings().consentCompleted,
-  );
-  const [isHistoryOpen, setIsHistoryOpen] = useState<boolean>(false);
+  const [isProgressOpen, setIsProgressOpen] = useState(false);
+  const [isSettingOpen, setIsSettingOpen] = useState(false);
+  const [isConsentOpen, setIsConsentOpen] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
-  // Apply dark class to root html/body
+  const [currentSettings, setCurrentSettings] =
+    useState<UserSettings>(DEFAULT_SETTINGS);
+  const [currentAttempts, setCurrentAttempts] = useState<Attempt[]>([]);
+  const [currentTheme, setCurrentTheme] = useState<"light" | "dark">("light");
+  const [currentLanguage, setCurrentLanguage] = useState<Language>("en");
+
+  // Initialize app state after hydration.
   useEffect(() => {
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-    setTheme(theme);
-  }, [theme]);
+    if (!isHydrated) return;
+
+    setCurrentSettings(settings);
+    setCurrentAttempts(attempts);
+    setCurrentTheme(theme);
+    setCurrentLanguage(language);
+    setIsConsentOpen(!settings.consentCompleted);
+  }, [isHydrated]);
+
+  // Apply theme to document.
+  useEffect(() => {
+    if (!isHydrated) return;
+
+    document.documentElement.classList.toggle(
+      "dark",
+      currentTheme === "dark"
+    );
+    setTheme(currentTheme);
+  }, [currentTheme, isHydrated]);
 
   const handleToggleTheme = () => {
-    const nextTheme = theme === "light" ? "dark" : "light";
-    setThemeState(nextTheme);
+    setCurrentTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
   const handleToggleLanguage = () => {
-    const nextLang: Language = language === "en" ? "vi" : "en";
-    setLanguageState(nextLang);
+    const nextLang: Language = currentLanguage === "en" ? "vi" : "en";
+    setCurrentLanguage(nextLang);
     setLanguage(nextLang);
   };
 
   const handleUpdateSettings = (newSettings: Partial<UserSettings>) => {
-    const updated = { ...settings, ...newSettings };
-    setSettings(updated);
+    const updated = { ...currentSettings, ...newSettings };
+    setCurrentSettings(updated);
     saveSettings(updated);
   };
 
   const handleStartPractice = () => {
     const expr = generateExpression(
-      settings.maxNumber,
-      settings.operatorCount,
-      settings.selectedOperations,
+      currentSettings.maxNumber,
+      currentSettings.operatorCount,
+      currentSettings.selectedOperations
     );
     setCurrentExpression(expr);
     setIsPracticing(true);
@@ -73,9 +125,9 @@ export default function App() {
 
   const handleNextExercise = () => {
     const expr = generateExpression(
-      settings.maxNumber,
-      settings.operatorCount,
-      settings.selectedOperations,
+      currentSettings.maxNumber,
+      currentSettings.operatorCount,
+      currentSettings.selectedOperations
     );
     setCurrentExpression(expr);
   };
@@ -84,7 +136,7 @@ export default function App() {
     status: ExerciseStatus,
     userAnswer: string,
     timeSpentSeconds: number,
-    incorrectCount: number,
+    incorrectCount: number
   ) => {
     if (!currentExpression) return;
 
@@ -99,8 +151,8 @@ export default function App() {
       createdAt: new Date().toISOString(),
     };
 
-    const updatedAttempts = [newAttempt, ...attempts];
-    setAttempts(updatedAttempts);
+    const updatedAttempts = [newAttempt, ...currentAttempts];
+    setCurrentAttempts(updatedAttempts);
     saveAttempts(updatedAttempts);
   };
 
@@ -124,25 +176,42 @@ export default function App() {
 
   const handleClearProgress = () => {
     clearAllAttempts();
-    setAttempts([]);
+    setCurrentAttempts([]);
   };
 
-  // Compute stats
-  const correctAttempts = attempts.filter((a) => a.result === "Correct");
-  const totalAttempts = attempts.length;
+  // Avoid rendering the app before browser data is loaded.
+  if (!isHydrated) {
+    return <div className="min-h-screen bg-slate-50" />;
+  }
+
+  // Compute statistics.
+  const correctAttempts = currentAttempts.filter(
+    (a) => a.result === "Correct"
+  );
+  const totalAttempts = currentAttempts.length;
   const correctCount = correctAttempts.length;
+
   const accuracy = totalAttempts
     ? Math.round((correctCount / totalAttempts) * 100)
     : 0;
-  const givenUpCount = attempts.filter((a) => a.result === "Given Up").length;
-  const timedOutCount = attempts.filter((a) => a.result === "Timed Out").length;
-  const totalPracticeTimeSeconds = attempts.reduce(
+
+  const givenUpCount = currentAttempts.filter(
+    (a) => a.result === "Given Up"
+  ).length;
+
+  const timedOutCount = currentAttempts.filter(
+    (a) => a.result === "Timed Out"
+  ).length;
+
+  const totalPracticeTimeSeconds = currentAttempts.reduce(
     (acc, a) => acc + a.timeSpentSeconds,
-    0,
+    0
   );
+
   const avgTimeSeconds = totalAttempts
     ? Math.round(totalPracticeTimeSeconds / totalAttempts)
     : 0;
+
   const fastestTimeSeconds = correctAttempts.length
     ? Math.min(...correctAttempts.map((a) => a.timeSpentSeconds))
     : null;
@@ -161,12 +230,11 @@ export default function App() {
   return (
     <div
       className={`min-h-screen flex flex-col font-sans transition-colors duration-200 ${
-        theme === "dark"
+        currentTheme === "dark"
           ? "bg-slate-950 text-white"
           : "bg-slate-50 text-slate-900"
       }`}
     >
-      {/* Navbar */}
       <Navbar
         onOpenProgress={() => setIsProgressOpen(true)}
         onOpenSettings={() => setIsSettingOpen(true)}
@@ -174,38 +242,35 @@ export default function App() {
           setIsPracticing(false);
           setCurrentExpression(null);
         }}
-        onExport={() => exportAttemptsJson(attempts)}
-        theme={theme}
+        onExport={() => exportAttemptsJson(currentAttempts)}
+        theme={currentTheme}
         onToggleTheme={handleToggleTheme}
-        settings={settings}
-        language={language}
+        settings={currentSettings}
+        language={currentLanguage}
         onToggleLanguage={handleToggleLanguage}
       />
 
-      {/* Main Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Practice Setup Area */}
           <div className="lg:col-span-4">
             <PracticeSetup
-              settings={settings}
+              settings={currentSettings}
               onUpdateSettings={handleUpdateSettings}
               onStartPractice={handleStartPractice}
-              theme={theme}
+              theme={currentTheme}
               isPracticing={isPracticing}
-              language={language}
+              language={currentLanguage}
             />
           </div>
 
-          {/* Practice Area */}
           <div className="lg:col-span-8">
             <PracticeArea
               currentExpression={currentExpression}
               onCompleteExercise={handleCompleteExercise}
               onNextExercise={handleNextExercise}
-              theme={theme}
+              theme={currentTheme}
               isPracticing={isPracticing}
-              language={language}
+              language={currentLanguage}
             />
           </div>
         </div>
