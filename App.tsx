@@ -18,6 +18,7 @@ import { Navbar } from "./components/Navbar";
 import { PracticeSetup } from "./components/PracticeSetup";
 import { PracticeArea } from "./components/PracticeArea";
 import { MathDoodles } from "./components/MathDoodles";
+import { ProgressModal } from "./components/ProgressModal";
 
 const DEFAULT_SETTINGS: UserSettings = {
   maxNumber: 10,
@@ -264,6 +265,19 @@ export default function App() {
       </main>
 
       {/* Modals */}
+      <ProgressModal
+        isOpen={isProgressOpen}
+        onClose={() => setIsProgressOpen(false)}
+        attempts={attempts}
+        stats={stats}
+        onViewAll={() => {
+          setIsProgressOpen(false);
+          setIsHistoryOpen(true);
+        }}
+        onHome={handleStartPractice}
+        theme={theme}
+        language={language}
+      />
     </div>
   );
 }
