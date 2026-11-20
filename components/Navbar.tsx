@@ -11,7 +11,6 @@ import {
   Moon,
   SettingsIcon,
   Sun,
-  Zap,
 } from "lucide-react";
 
 interface NavbarProps {
