@@ -102,6 +102,9 @@ const translations = {
     date: "Date",
     noMatchingRecords: "No matching practice records found.",
     languageToggle: "Switch language (EN / VN)",
+    themeToggle: "Appearance",
+    darkSwitch: "Switch to Dark Mode",
+    lightSwitch: "Switch to Light Mode",
   },
   vi: {
     appName: "Mathy",
@@ -203,6 +206,9 @@ const translations = {
     date: "Ngày giờ",
     noMatchingRecords: "Không tìm thấy bản ghi phù hợp.",
     languageToggle: "Đổi ngôn ngữ (EN / VN)",
+    themeToggle: "Giao diện",
+    darkSwitch: "Chuyển sang chế độ Tối",
+    lightSwitch: "Chuyển sang chế độ Sáng",
   },
 };
 
