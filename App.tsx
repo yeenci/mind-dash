@@ -4,6 +4,7 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import { Attempt, ExerciseStatus, PracticeStats, UserSettings } from "./types";
 import {
   clearAllAttempts,
+  exportAttemptsCsv,
   exportAttemptsJson,
   getTheme,
   loadAttempts,
@@ -19,6 +20,7 @@ import { PracticeSetup } from "./components/PracticeSetup";
 import { PracticeArea } from "./components/PracticeArea";
 import { MathDoodles } from "./components/MathDoodles";
 import { ProgressModal } from "./components/ProgressModal";
+import { SettingsModal } from "./components/SettingsModal";
 
 const DEFAULT_SETTINGS: UserSettings = {
   maxNumber: 10,
@@ -275,6 +277,18 @@ export default function App() {
           setIsHistoryOpen(true);
         }}
         onHome={handleStartPractice}
+        theme={theme}
+        language={language}
+      />
+
+      <SettingsModal
+        isOpen={isSettingOpen}
+        onClose={() => setIsSettingOpen(false)}
+        settings={settings}
+        onUpdateSettings={handleUpdateSettings}
+        onExportJson={() => exportAttemptsJson(attempts)}
+        onExportCsv={() => exportAttemptsCsv(attempts)}
+        onClearProgress={handleClearProgress}
         theme={theme}
         language={language}
       />

@@ -37,10 +37,10 @@ export const ProgressModal: React.FC<ProgressModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between mb-7">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-[#ffd76a] text-[#25238b] flex items-center justify-center shrink-0">
+            <div className="w-11 h-11 rounded-2xl bg-[#eaf6dc] text-[#245322] dark:bg-[#223629] dark:text-[#bce899] flex items-center justify-center shrink-0">
               <BarChart3 className="w=5 h-5" />
             </div>
-            <h2 className="font-display text-xl sm:text-2xl font-extrabold tracking-tight">
+            <h2 className="font-display text-xl sm:text-2xl font-extrabold tracking-tight text-[#245322] dark:text-[#bce899]">
               {t("yourProgress", undefined, language)}
             </h2>
           </div>
