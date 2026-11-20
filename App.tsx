@@ -1,13 +1,7 @@
-
 "use client";
 
 import { useEffect, useState, useSyncExternalStore } from "react";
-import {
-  Attempt,
-  ExerciseStatus,
-  PracticeStats,
-  UserSettings,
-} from "./types";
+import { Attempt, ExerciseStatus, PracticeStats, UserSettings } from "./types";
 import {
   clearAllAttempts,
   exportAttemptsJson,
@@ -23,6 +17,7 @@ import { GeneratedExpression, generateExpression } from "./utils/mathEngine";
 import { Navbar } from "./components/Navbar";
 import { PracticeSetup } from "./components/PracticeSetup";
 import { PracticeArea } from "./components/PracticeArea";
+import { MathDoodles } from "./components/MathDoodles";
 
 const DEFAULT_SETTINGS: UserSettings = {
   maxNumber: 10,
@@ -51,7 +46,7 @@ export default function App() {
   const isHydrated = useSyncExternalStore(
     subscribeToHydration,
     getClientSnapshot,
-    getServerSnapshot
+    getServerSnapshot,
   );
 
   // App data
@@ -90,10 +85,7 @@ export default function App() {
   useEffect(() => {
     if (!isHydrated) return;
 
-    document.documentElement.classList.toggle(
-      "dark",
-      currentTheme === "dark"
-    );
+    document.documentElement.classList.toggle("dark", currentTheme === "dark");
     setTheme(currentTheme);
   }, [currentTheme, isHydrated]);
 
@@ -117,7 +109,7 @@ export default function App() {
     const expr = generateExpression(
       currentSettings.maxNumber,
       currentSettings.operatorCount,
-      currentSettings.selectedOperations
+      currentSettings.selectedOperations,
     );
     setCurrentExpression(expr);
     setIsPracticing(true);
@@ -127,7 +119,7 @@ export default function App() {
     const expr = generateExpression(
       currentSettings.maxNumber,
       currentSettings.operatorCount,
-      currentSettings.selectedOperations
+      currentSettings.selectedOperations,
     );
     setCurrentExpression(expr);
   };
@@ -136,7 +128,7 @@ export default function App() {
     status: ExerciseStatus,
     userAnswer: string,
     timeSpentSeconds: number,
-    incorrectCount: number
+    incorrectCount: number,
   ) => {
     if (!currentExpression) return;
 
@@ -185,9 +177,7 @@ export default function App() {
   }
 
   // Compute statistics.
-  const correctAttempts = currentAttempts.filter(
-    (a) => a.result === "Correct"
-  );
+  const correctAttempts = currentAttempts.filter((a) => a.result === "Correct");
   const totalAttempts = currentAttempts.length;
   const correctCount = correctAttempts.length;
 
@@ -196,16 +186,16 @@ export default function App() {
     : 0;
 
   const givenUpCount = currentAttempts.filter(
-    (a) => a.result === "Given Up"
+    (a) => a.result === "Given Up",
   ).length;
 
   const timedOutCount = currentAttempts.filter(
-    (a) => a.result === "Timed Out"
+    (a) => a.result === "Timed Out",
   ).length;
 
   const totalPracticeTimeSeconds = currentAttempts.reduce(
     (acc, a) => acc + a.timeSpentSeconds,
-    0
+    0,
   );
 
   const avgTimeSeconds = totalAttempts
@@ -228,13 +218,9 @@ export default function App() {
   };
 
   return (
-    <div
-      className={`min-h-screen flex flex-col font-sans transition-colors duration-200 ${
-        currentTheme === "dark"
-          ? "bg-slate-950 text-white"
-          : "bg-slate-50 text-slate-900"
-      }`}
-    >
+    <div className="relative min-h-screen flex flex-col font-sans bg-[#fffdf6] dark:bg-[#151726] text-[#25283b] dark:text-[#f6f4ec] transition-colors duration-200 overflow-x-hidden">
+      <MathDoodles variant="page" />
+
       <Navbar
         onOpenProgress={() => setIsProgressOpen(true)}
         onOpenSettings={() => setIsSettingOpen(true)}
@@ -248,6 +234,7 @@ export default function App() {
         settings={currentSettings}
         language={currentLanguage}
         onToggleLanguage={handleToggleLanguage}
+        isPracticing={isPracticing}
       />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -275,6 +262,8 @@ export default function App() {
           </div>
         </div>
       </main>
+
+      {/* Modals */}
     </div>
   );
 }
