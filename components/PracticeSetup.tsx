@@ -1,5 +1,6 @@
 import { OperationType, UserSettings } from "@/types";
-import { Language } from "@/utils/i18n";
+import { Language, t } from "@/utils/i18n";
+import { SlidersHorizontal } from "lucide-react";
 
 interface PracticeSetupProps {
   settings: UserSettings;
@@ -9,6 +10,45 @@ interface PracticeSetupProps {
   isPracticing: boolean;
   language: Language;
 }
+
+const OPERATION_THEMES: Record<
+  OperationType,
+  {
+    symbol: string;
+    activeBg: string;
+    symbolBg: string;
+    symbolText: string;
+  }
+> = {
+  "+": {
+    symbol: "+",
+    activeBg:
+      "bg-[#fff3c4] dark:bg-[#3a311d] text-[#25283b] dark:text-[#ffe596]",
+    symbolBg: "bg-[#ffd76a] text-[#25283b]",
+    symbolText: "text-[#25283b]",
+  },
+  "-": {
+    symbol: "-",
+    activeBg:
+      "bg-[#ffe4dc] dark:bg-[#3b2527] text-[#25283b] dark:text-[#ffb8a8]",
+    symbolBg: "bg-[#ffad99] text-[#25283b]",
+    symbolText: "text-[#25283b]",
+  },
+  x: {
+    symbol: "x",
+    activeBg:
+      "bg-[#ede6ff] dark:bg-[#2c2547] text-[#25283b] dark:text-[#dcd0fa]",
+    symbolBg: "bg-[#c9b7fa] text-[#25283b]",
+    symbolText: "text-[#25283b]",
+  },
+  "÷": {
+    symbol: "÷",
+    activeBg:
+      "bg-[#dff0fc] dark:bg-[#1e3245] text-[#25283b] dark:text-[#bde1fa]",
+    symbolBg: "bg-[#a6d6f7] text-[#25283b]",
+    symbolText: "text-[#25283b]",
+  },
+};
 
 export const PracticeSetup: React.FC<PracticeSetupProps> = ({
   settings,
@@ -44,15 +84,24 @@ export const PracticeSetup: React.FC<PracticeSetupProps> = ({
     onUpdateSettings({ selectedOperations: updated });
   };
 
+  const operations: { id: OperationType; label: string }[] = [
+    { id: "+", label: t("addition", undefined, language) },
+    { id: "-", label: t("subtraction", undefined, language) },
+    { id: "x", label: t("multiplication", undefined, language) },
+    { id: "÷", label: t("division", undefined, language) },
+  ];
+
   return (
-    <div
-      className={`p-6 rounded-2xl border shadow-sm transition-colors ${
-        theme === "dark"
-          ? "bg-slate-900 border-slate-800 text-white"
-          : "bg-white border-slate-200 text-slate-800"
-      }`}
-    >
-      PracticeSetup Area
-    </div>
+    <section className="p-6 sm:p-7 rounded-[28px] bg-white dark:bg-[#1e2136] text-[#25283b] dark:text-[#f6f4ec] shadow-[0_14px_38px_-14px_rgba(37,40,59,0.09)] dark:shadow-[0_14px_38px_-14px_rgba(0,0,0,0.45)] transition-colors duration-200">
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-7">
+        <div className="w-10 h-10 rounded-2xl bg-[#fff3c4] dark:bg-[#3a311d] text-[#25283b] dark:text-[#ffd76a] flex items-center justify-center shrink-0">
+          <SlidersHorizontal className="w-5 h-5" />
+        </div>
+        <h2 className="font-display text-lg font-bold tracking-tight">
+          {t("practiceSetup", undefined, language)}
+        </h2>
+      </div>
+    </section>
   );
 };
