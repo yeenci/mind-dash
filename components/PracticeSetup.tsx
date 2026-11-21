@@ -1,6 +1,7 @@
 import { OperationType, UserSettings } from "@/types";
 import { Language, t } from "@/utils/i18n";
-import { SlidersHorizontal } from "lucide-react";
+import { HelpCircle, Play, SlidersHorizontal } from "lucide-react";
+import { motion } from "motion/react";
 
 interface PracticeSetupProps {
   settings: UserSettings;
@@ -101,6 +102,54 @@ export const PracticeSetup: React.FC<PracticeSetupProps> = ({
         <h2 className="font-display text-lg font-bold tracking-tight">
           {t("practiceSetup", undefined, language)}
         </h2>
+      </div>
+
+      <div className="space-y-6">
+        {/* Maximum number (1 - 6) */}
+        <div>
+          <label
+            htmlFor="mathy-max-number"
+            className="flex items-center justify-between text-xs font-bold tracking-wide mb-2.5 text-[#5e6075] dark:text-[#a3a6be]"
+          >
+            <span>{t("maxNumber", undefined, language)}</span>
+            <span
+              title={t("maxNumberTooltip", undefined, language)}
+              className="text-[#858594] dark:text-[#7e829e] hover:text-[#25283b] dark:hover:text-[#f6f4ec] transition-colors cursor-help"
+            >
+              <HelpCircle className="w-4 h-4" />
+            </span>
+          </label>
+          <input
+            id="mathy-max-number"
+            type="number"
+            min={2}
+            max={10000}
+            value={settings.maxNumber}
+            onChange={handleMaxNumberChange}
+            className="w-full px-4 py-3.5 rounded-2xl bg-[#f7f4ea] dark:bg-[#272b44] text-[#25283b] dark:text-[#f6f4ec] font-mono text-base font-semibold tabular-nums focus:outline-none focus:bg-white dark:focus:bg-[#2d324f] focus:ring-3 focus:ring-[#ffd76a]/80 transition-all"
+          />
+        </div>
+
+        {/* Number of operations */}
+
+        {/* Operation types */}
+
+        {/* Start Practice button */}
+        <motion.button
+          type="button"
+          onClick={onStartPractice}
+          whileHover={{ y: -1 }}
+          whileTap={{ scale: 0.98 }}
+          transition={{ duration: 0.15 }}
+          className="w-full min-h-13 py-3.5 px-5 rounded-2xl bg-[#ffd76a] hover:bg-[#ffc93c] text-[#25283b] font-display font-bold text-base shadow-[0_10px_24px_-8px_rgba(255,215,106,0.85)] darkshadow-[0_10px_24px_-8px_rgba(255,215,106,0.35)] flex items-center justify-center gap-2.5 cursor-pointer transition-colors duration-150 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#ffd76a]/50"
+        >
+          <Play className="w-4 h-4 fill-current shrink-0" />
+          <span className="whitespace-nowrap">
+            {isPracticing
+              ? t("restartPractice", undefined, language)
+              : t("startPractice", undefined, language)}
+          </span>
+        </motion.button>
       </div>
     </section>
   );
