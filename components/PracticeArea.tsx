@@ -27,7 +27,7 @@ function getOperatorColorClass(token: string): string {
     case "-":
     case "−":
       return "text-[#d9534f] dark:text-[#ff9e8a]";
-    case "x":
+    case "×":
     case "*":
       return "text-[#6d4aff] dark:text-[#dcd0fa]";
     case "÷":

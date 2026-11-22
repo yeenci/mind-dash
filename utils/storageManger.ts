@@ -1,13 +1,13 @@
 import { Attempt, UserSettings } from "@/types";
 
-const SETTINGS_KEY = "minddash_settings_v1";
-const ATTEMPS_KEY = "minddash_attempts_v1";
-const THEME_KEY = "minddash_theme_v1";
+const SETTINGS_KEY = "mathy_settings_v1";
+const ATTEMPS_KEY = "mathy_attempts_v1";
+const THEME_KEY = "mathy_theme_v1";
 
 export const DEFAULT_SETTINGS: UserSettings = {
   maxNumber: 100,
   operatorCount: 6,
-  selectedOperations: ["+", "-", "x", "÷"],
+  selectedOperations: ["+", "-", "×", "÷"],
   storageMode: "persistent",
   retentionDays: 30,
   consentCompleted: false,
@@ -118,7 +118,7 @@ export function exportAttemptsJson(attempts: Attempt[]): void {
   downloadAnchor.setAttribute("href", dataStr);
   downloadAnchor.setAttribute(
     "download",
-    `minddash_progress_${new Date().toISOString().slice(0, 10)}.json`,
+    `mathy_progress_${new Date().toISOString().slice(0, 10)}.json`,
   );
   document.body.appendChild(downloadAnchor);
   downloadAnchor.click();
@@ -154,7 +154,7 @@ export function exportAttemptsCsv(attempts: Attempt[]): void {
   downloadAnchor.setAttribute("href", encodedUri);
   downloadAnchor.setAttribute(
     "download",
-    `minddash_progress_${new Date().toISOString().slice(0, 10)}.csv`,
+    `mathy_progress_${new Date().toISOString().slice(0, 10)}.csv`,
   );
   document.body.appendChild(downloadAnchor);
   downloadAnchor.click();

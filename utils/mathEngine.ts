@@ -8,7 +8,7 @@ export interface GeneratedExpression {
 
 // 🪼 Evaluate
 export function evaluateExpression(exprStr: string): number {
-  const cleanExpr = exprStr.replace(/x/g, "*").replace(/÷/g, "/");
+  const cleanExpr = exprStr.replace(/×/g, "*").replace(/÷/g, "/");
 
   const tokens = tokenize(cleanExpr);
   if (tokens.length === 0) return 0;

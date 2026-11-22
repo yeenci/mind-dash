@@ -19,7 +19,7 @@ const translations = {
     operationTooltip: "Select which operations to include",
     addition: "Addition (+)",
     subtraction: "Subtraction (-)",
-    multiplication: "Multiplication (x)",
+    multiplication: "Multiplication (×)",
     division: "Division (÷)",
     startPractice: "Start Practice",
     restartPractice: "Restart Practice",
@@ -105,6 +105,8 @@ const translations = {
     themeToggle: "Appearance",
     darkSwitch: "Switch to Dark Mode",
     lightSwitch: "Switch to Light Mode",
+    operation: 'operation',
+    operations: 'operations',
   },
   vi: {
     appName: "Mathy",
@@ -121,7 +123,7 @@ const translations = {
     operationTooltip: "Chọn các phép tính muốn luyện tập",
     addition: "Cộng (+)",
     subtraction: "Trừ (-)",
-    multiplication: "Nhân (x)",
+    multiplication: "Nhân (×)",
     division: "Chia (÷)",
     startPractice: "Bắt đầu luyện tập",
     restartPractice: "Làm lại",
@@ -209,10 +211,12 @@ const translations = {
     themeToggle: "Giao diện",
     darkSwitch: "Chuyển sang chế độ Tối",
     lightSwitch: "Chuyển sang chế độ Sáng",
+    operation: 'phép tính',
+    operations: 'phép tính',
   },
 };
 
-const LANGUAGE_KEY = "minddash_lang_v1";
+const LANGUAGE_KEY = "mathy_lang_v1";
 
 export function getLanguage(): Language {
   try {

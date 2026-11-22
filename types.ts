@@ -1,4 +1,4 @@
-export type OperationType = "+" | "-" | "x" | "÷";
+export type OperationType = "+" | "-" | "×" | "÷";
 
 export type ExerciseStatus = "Correct" | "Given Up" | "Timed Out";
 

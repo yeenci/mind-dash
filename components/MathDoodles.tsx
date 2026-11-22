@@ -17,7 +17,7 @@ export const MathDoodles: React.FC<MathDoodlesProps> = ({
           +
         </span>
         <span className="absolute top-8 right-8 font-display text-2xl font-bold text-[#b9a6f5]/45 dark:text-[#dcd0fa]/15 rotate-12">
-          x
+          ×
         </span>
         <span className="absolute bottom-6 left-10 font-display text-2xl font-bold text-[#89c8f0]/45 dark:text-[#c9e4f8]/15 rotate-6">
           ÷
@@ -43,7 +43,7 @@ export const MathDoodles: React.FC<MathDoodlesProps> = ({
         +
       </div>
       <div className="hidden lg:block absolute bottom-24 left-12 font-display text-4xl font-bold text-[#dcd0fa]/50 dark:text-[#dcd0fa]/10 rotate-12">
-        x
+        ×
       </div>
       <div className="hidden lg:block absolute top-32 right-12 font-display text-4xl font-bold text-[#c8e9a7]/50 dark:text-[#c8e9a7]/10 -rotate-6">
         -

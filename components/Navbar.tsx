@@ -156,7 +156,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             type="button"
             onClick={onToggleTheme}
             title={`${theme === "dark" ? t("lightSwitch", undefined, language) : t("darkSwitch", undefined, language)}`}
-            className="min-h-10 min-w-10 p-x rounded-2xl bg-[#f5f1e4] dark:bg-[#252942] text-[#25283b] dark:text-[#ffd76a] hover:bg-[#fff3c4] dark:hover:bg-[#2f3554] flex items-center justify-center shrink-0 transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ffd76a]"
+            className="min-h-10 min-w-10 p-2 rounded-2xl bg-[#f5f1e4] dark:bg-[#252942] text-[#25283b] dark:text-[#ffd76a] hover:bg-[#fff3c4] dark:hover:bg-[#2f3554] flex items-center justify-center shrink-0 transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ffd76a]"
           >
             {theme === "dark" ? (
               <Sun className="w-4 h-4" />
