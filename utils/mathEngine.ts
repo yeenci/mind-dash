@@ -85,7 +85,7 @@ export function generateExpression(
   const opSymbols: OperationType[] = selectedOperations;
   let attempts = 0;
 
-  while (attempts < 10) {
+  while (attempts < 100) {
     attempts++;
     const operands: number[] = [];
     const operators: OperationType[] = [];
@@ -107,13 +107,38 @@ export function generateExpression(
         let divisor = Math.floor(Math.random() * (maxDivisor - 1)) + 2;
         if (divisor < 2) divisor = 2;
 
-        const maxMultipler = Math.max(2, Math.floor(maxNumber / divisor));
-        let multiplier = Math.floor(Math.random() * (maxMultipler - 1)) + 2;
+        const maxMultiplier = Math.max(2, Math.floor(maxNumber / divisor));
+        let multiplier = Math.floor(Math.random() * (maxMultiplier - 1)) + 2;
         if (multiplier <= 1) multiplier = 2;
 
         operands[i + 1] = divisor;
         operands[i] = divisor * multiplier;
       }
+    }
+
+    const exprParts: string[] = [];
+    for (let i = 0; i < operatorCount; i++) {
+      exprParts.push(operands[i].toString());
+      exprParts.push(operators[i]);
+    }
+    exprParts.push(operands[operatorCount].toString());
+
+    const expressionString = exprParts.join(" ");
+    const displayString = expressionString
+      .replace(/\*/g, "×")
+      .replace(/\//g, "÷");
+
+    try {
+      const result = evaluateExpression(expressionString);
+      if (Number.isFinite(result) && Math.abs(result) <= 100000) {
+        return {
+          expressionString,
+          displayString,
+          result,
+        };
+      }
+    } catch {
+      continue;
     }
   }
 

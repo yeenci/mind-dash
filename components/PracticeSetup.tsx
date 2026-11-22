@@ -154,7 +154,7 @@ export const PracticeSetup: React.FC<PracticeSetupProps> = ({
               id="mathy-op-count"
               value={settings.operatorCount}
               onChange={handleOpCountChange}
-              className="w-full appearance-none px-4 py-3.5 pr-10 rounded-2xl bg-[#f7f4ea] dark:bg-[#272b44] text-[#25283b] dark:text-[#f6f4ec] text-sm font-semibold focus:outline-none focus:bg-white dark:focus:bg-[#2d324f] focus:ring-3 focus:ring-[#ffd76a]/80 transition=all cursor-pointer"
+              className="w-full appearance-none px-4 py-3.5 pr-10 rounded-2xl bg-[#f7f4ea] dark:bg-[#272b44] text-[#25283b] dark:text-[#f6f4ec] text-sm font-semibold focus:outline-none focus:bg-white dark:focus:bg-[#2d324f] focus:ring-3 focus:ring-[#ffd76a]/80 transition-all cursor-pointer"
             >
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
                 <option key={n} value={n}>
@@ -165,7 +165,7 @@ export const PracticeSetup: React.FC<PracticeSetupProps> = ({
                 </option>
               ))}
             </select>
-            <ChevronDown className="w-4 h-4 text-[#737589] dark:text-[#a3a6be] pointer=events-none absolute right-4 top-1/2 -translate-y-1/2" />
+            <ChevronDown className="w-4 h-4 text-[#737589] dark:text-[#a3a6be] pointer-events-none absolute right-4 top-1/2 -translate-y-1/2" />
           </div>
         </div>
 
